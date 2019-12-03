@@ -12,11 +12,9 @@ module.exports.outputErrors = (errors) => {
       console.log(colors.bold(colors.underline(fileName) + '": ') + colors.red(numFileErrors + ' errors'))
       Object.keys(fileErrors).forEach((fileErrorKey) => {
         const error = fileErrors[fileErrorKey]
-        if (error.error === 'featureUndefined') {
-          console.log(colors.blue('undefined feature: ' + fileErrorKey))
-        } else if (error.error === 'parse') {
+        if (error.error === 'parse') {
           console.log(colors.red('parse error: ' + error.msg))
-        } else if (error.error === 'incompatibility') {
+        } else if (error.error === 'incompatibility' || error.error === 'featureUndefined') {
           const incompatEnvString = error.incompatEnvs.join(', ')
           const partialEnvString = error.partialEnvs.join(', ')
 

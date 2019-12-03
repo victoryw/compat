@@ -14,7 +14,9 @@ exports.checkFeatureCompatibility = (usedFeatures, envs, compatTableLocation) =>
     if (!featureDefined(compatTable, feature)) {
       errors[feature] = {
         features: usedFeatures[feature],
-        error: 'featureUndefined'
+        error: 'featureUndefined',
+        incompatEnvs: envs,
+        partialEnvs: []
       }
     } else {
       let error = {
