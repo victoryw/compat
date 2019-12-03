@@ -9,32 +9,34 @@ module.exports.outputErrors = (errors) => {
       const fileErrors = errors[fileName]
       const fileContents = fs.readFileSync(fileName, 'utf8')
       const maxRange = fileContents.length - 1
-      console.log(colors.bold(colors.underline(fileName) + '": ') + colors.red(numFileErrors + ' errors'))
+      
+
+      console.error(colors.bold(colors.underline(fileName) + '": ') + colors.red(numFileErrors + ' errors'))
       Object.keys(fileErrors).forEach((fileErrorKey) => {
         const error = fileErrors[fileErrorKey]
         if (error.error === 'parse') {
-          console.log(colors.red('parse error: ' + error.msg))
+          console.error(colors.red('parse error: ' + error.msg))
         } else if (error.error === 'incompatibility' || error.error === 'featureUndefined') {
           const incompatEnvString = error.incompatEnvs.join(', ')
           const partialEnvString = error.partialEnvs.join(', ')
 
           if (incompatEnvString.length > 0 || partialEnvString.length > 0) {
-            console.log(colors.bold('  feature: ') + fileErrorKey)
+            console.error(colors.bold('  feature: ') + fileErrorKey)
             if (incompatEnvString.length > 0) {
-              console.log(colors.red(colors.bold('    incompatible: ') + incompatEnvString))
+              console.error(colors.red(colors.bold('    incompatible: ') + incompatEnvString))
             }
             if (partialEnvString.length > 0) {
-              console.log(colors.yellow(colors.bold('    partial:      ') + partialEnvString))
+              console.error(colors.yellow(colors.bold('    partial:      ') + partialEnvString))
             }
 
             error.features.forEach((feature) => {
               if (feature.loc !== undefined) {
-                console.log(colors.bold('    ' + 'on line ' + colors.underline(feature.loc.start.line) + ':'))
+                console.error(colors.bold('    ' + 'on line ' + colors.underline(feature.loc.start.line) + ':'))
               }
               if (feature.range.length === 2) {
-                console.log(indentString(fileContents.slice(feature.range[0], feature.range[1]), 6))
+                console.error(indentString(fileContents.slice(feature.range[0], feature.range[1]), 6))
               } else if (feature.range.length === 1) {
-                console.log(indentString(fileContents.slice(feature.range[0], Math.min(feature.range[0] + 20, maxRange)), 6))
+                console.error(indentString(fileContents.slice(feature.range[0], Math.min(feature.range[0] + 20, maxRange)), 6))
               }
             })
           }
